@@ -154,15 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        //new
-        // Registra el BroadcastReceiver
-        /*IntentFilter filter = new IntentFilter("com.example.ottorobot.SEND_CHAR");
-        registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
-        }*/
-        //new
         // 03 -----------------------------------------------------------------
 
     }
@@ -310,26 +301,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    //new
-    /*private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("com.example.ottorobot.SEND_CHAR")) {
-                char receivedChar = intent.getCharExtra("charData", ' ');
-                MyConexionBT.write(receivedChar); // Envía el carácter por Bluetooth
-            }
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Desregistrar el BroadcastReceiver
-        unregisterReceiver(receiver);
-    }*/
-    //new
-
-
     // 04 -----------------------------------------------------------------
 }
