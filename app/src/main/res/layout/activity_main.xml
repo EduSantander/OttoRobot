@@ -56,18 +56,18 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/IdBtnHome"
+                android:id="@+id/IdBtnCantar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="BAILE 1" />
+                android:text="CANTAR" />
 
             <Button
                 android:id="@+id/IdBtnBaile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="BAILE 2" />
+                android:text="BAILE" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,9 +80,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="BAILE 3" />
+                android:text="EVASOR DE OBSTACULOS" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/_64222_798991" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

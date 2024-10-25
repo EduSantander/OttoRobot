@@ -1,10 +1,6 @@
 package com.example.ottorobot;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 // 01 -----------------------------------------------------------------
 import android.view.View;
@@ -33,8 +29,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.TextView;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -56,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private ConnectedThread MyConexionBT;
     private ArrayList<String> mNameDevices = new ArrayList<>();
     private ArrayAdapter<String> deviceAdapter;
-    Button IdBtnBuscar,IdBtnConectar,IdBtnHome,IdBtnBaile,IdBtnContAt,IdBtnContRem,IdBtnDesconectar;
+    Button IdBtnBuscar,IdBtnConectar,IdBtnCantar,IdBtnBaile,IdBtnContAt,IdBtnDesconectar;
     Spinner IdDisEncontrados;
     // 02 -----------------------------------------------------------------
     @Override
@@ -76,10 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
         IdBtnBuscar = findViewById(R.id.IdBtnBuscar);
         IdBtnConectar = findViewById(R.id.IdBtnConectar);
-        IdBtnHome = findViewById(R.id.IdBtnHome);
+        IdBtnCantar = findViewById(R.id.IdBtnCantar);
         IdBtnBaile = findViewById(R.id.IdBtnBaile);
         IdBtnContAt = findViewById(R.id.IdBtnContAt);
-        //IdBtnContRem = findViewById(R.id.IdBtnContRem);
         IdBtnDesconectar = findViewById(R.id.IdBtnDesconectar);
         IdDisEncontrados = findViewById(R.id.IdDisEncontrados);
 
@@ -103,12 +97,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        IdBtnHome.setOnClickListener(new View.OnClickListener() {
+        IdBtnCantar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Codigo para evento de pulsar boton
-                Toast.makeText(getBaseContext(),"Se ha presionado baile 1",Toast.LENGTH_SHORT).show();
-                MyConexionBT.write('a');
+                Toast.makeText(getBaseContext(),"Se ha presionado CANTAR",Toast.LENGTH_SHORT).show();
+                try {
+                    // Intentar enviar la señal por Bluetooth
+                    MyConexionBT.write('a');
+                } catch (Exception e) {
+                    // Si ocurre un error, como que el dispositivo no esté conectado, mostrar un Toast
+                    Toast.makeText(getBaseContext(), "Para realizar esta accion conecte un dispositivo", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -116,8 +116,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Codigo para evento de pulsar boton
-                Toast.makeText(getBaseContext(),"Se ha presionado baile 2",Toast.LENGTH_SHORT).show();
-                MyConexionBT.write('b');
+                Toast.makeText(getBaseContext(),"Se ha presionado BAILAR",Toast.LENGTH_SHORT).show();
+                try {
+                    // Intentar enviar la señal por Bluetooth
+                    MyConexionBT.write('b');
+                } catch (Exception e) {
+                    // Si ocurre un error, como que el dispositivo no esté conectado, mostrar un Toast
+                    Toast.makeText(getBaseContext(), "Para realizar esta accion conecte un dispositivo", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -125,20 +131,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Codigo para evento de pulsar boton
-                Toast.makeText(getBaseContext(),"Se ha presionado baile 3",Toast.LENGTH_SHORT).show();
-                MyConexionBT.write('c');
+                Toast.makeText(getBaseContext(),"Se ha presionado EVASOR DE OBSTACULOS",Toast.LENGTH_SHORT).show();
+                try {
+                    // Intentar enviar la señal por Bluetooth
+                    MyConexionBT.write('c');
+                } catch (Exception e) {
+                    // Si ocurre un error, como que el dispositivo no esté conectado, mostrar un Toast
+                    Toast.makeText(getBaseContext(), "Para realizar esta accion conecte un dispositivo", Toast.LENGTH_LONG).show();
+                }
             }
         });
-
-        /*IdBtnContRem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Codigo para evento de pulsar boton
-                Intent i = new Intent(MainActivity.this, controlRemoto.class);
-                startActivity(i);
-                Toast.makeText(getBaseContext(),"Se ha presionado Control remoto",Toast.LENGTH_SHORT).show();
-            }
-        });*/
 
         IdBtnDesconectar.setOnClickListener(new View.OnClickListener() {
             @Override
