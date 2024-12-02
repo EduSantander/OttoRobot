@@ -3,6 +3,7 @@
 ## **Introducción**
 
 Este proyecto es una aplicación Android que permite la conexión y comunicación con un dispositivo Bluetooth, como un robot controlado mediante señales. La aplicación incluye funcionalidades para buscar dispositivos Bluetooth emparejados, establecer una conexión y enviar comandos para controlar diferentes acciones del dispositivo, como "cantar", "bailar" o realizar la evasión de obstáculos.
+Descarga de la Aplicación: [OttoRobot.apk]((https://github.com/EduSantander/OttoRobot/blob/master/app/OttoRobot.apk))
 
 ## **Dependencias y permisos**
 
