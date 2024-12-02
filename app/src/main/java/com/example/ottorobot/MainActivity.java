@@ -1,10 +1,8 @@
 package com.example.ottorobot;
 
-
+// Importación de bibliotecas necesarias
 import android.os.Bundle;
-// 01 -----------------------------------------------------------------
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -37,38 +36,47 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
-// 01 -----------------------------------------------------------------
+// Clase principal de la aplicación que extiende AppCompatActivity
 public class MainActivity extends AppCompatActivity {
-    // 02 -----------------------------------------------------------------
-    private static final String TAG = "MainActivity";
-    private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private static final int REQUEST_ENABLE_BT = 1;
-    private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 3;
-    private static final int REQUEST_FINE_LOCATION_PERMISSION = 2;
+    // Declaración de constantes para solicitudes de permisos y UUID de Bluetooth
+    private static final String TAG = "MainActivity"; //Tag para registro de logs
+    private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // UUID para comunicación Bluetooth
+    private static final int REQUEST_ENABLE_BT = 1; // Solicitud para habilitar Bluetooth
+    private static final int REQUEST_BLUETOOTH_CONNECT_PERMISSION = 3; // Solicitud de permisos de conexión Bluetooth
+    private static final int REQUEST_FINE_LOCATION_PERMISSION = 2; // Solicitud de permisos de ubicación
+
+    // Variables para manejar Bluetooth y la interfaz de usuario
     private BluetoothAdapter mBtAdapter;
     private BluetoothSocket btSocket;
     private BluetoothDevice DispositivoSeleccionado;
-    private ConnectedThread MyConexionBT;
-    private ArrayList<String> mNameDevices = new ArrayList<>();
+    private ConnectedThread MyConexionBT; // Clase interna para manejar la comunicación Bluetooth
+    private ArrayList<String> mNameDevices = new ArrayList<>(); // Lista de nombres de dispositivos Bluetooth
     private ArrayAdapter<String> deviceAdapter;
+
+    // Botones y Spinner de la interfaz de usuario
     Button IdBtnBuscar,IdBtnConectar,IdBtnCantar,IdBtnBaile,IdBtnContAt,IdBtnDesconectar;
     Spinner IdDisEncontrados;
-    // 02 -----------------------------------------------------------------
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 03 -----------------------------------------------------------------
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
 
+        // Configuración inicial de la actividad
+        EdgeToEdge.enable(this); //Configuración para mostrar contenido en pantalla completa
+        setContentView(R.layout.activity_main); //Establece el diseño de la actividad
+
+        // Solicitar permisos necesarios
         requestBluetoothConnectPermission();
         requestLocationPermission();
+
+        // Manejo de insets de la ventana para ajustar los elementos de la interfaz
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Inicialización de elementos de la interfaz
         IdBtnBuscar = findViewById(R.id.IdBtnBuscar);
         IdBtnConectar = findViewById(R.id.IdBtnConectar);
         IdBtnCantar = findViewById(R.id.IdBtnCantar);
@@ -77,10 +85,12 @@ public class MainActivity extends AppCompatActivity {
         IdBtnDesconectar = findViewById(R.id.IdBtnDesconectar);
         IdDisEncontrados = findViewById(R.id.IdDisEncontrados);
 
+        // Configuración del adaptador para mostrar dispositivos encontrados
         deviceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,mNameDevices);
         deviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         IdDisEncontrados.setAdapter(deviceAdapter);
 
+        // Configuración de eventos para los botones
         IdBtnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,18 +158,18 @@ public class MainActivity extends AppCompatActivity {
                 //Codigo para evento de pulsar boton
                 if (btSocket!=null)
                 {
-                    try {btSocket.close();}
-                    catch (IOException e)
-                    { Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();}
+                    try {btSocket.close();
+                        btSocket = null;
+                        Toast.makeText(getBaseContext(), "Dispositivo desconectado", Toast.LENGTH_SHORT).show();}
+                    catch (IOException e){
+                    { Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();}}
                 }
                 finish();
-
             }
         });
-        // 03 -----------------------------------------------------------------
-
     }
-    // 04 -----------------------------------------------------------------
+
+    // Método para registrar resultados de actividades
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -173,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+    // Método para buscar dispositivos vinculados
     public void DispositivosVinculados() {
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBtAdapter == null) {
@@ -189,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
             someActivityResultLauncher.launch(enableBtIntent);
         }
 
+        // Listener para seleccionar un dispositivo del Spinner
         IdDisEncontrados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -201,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Obtiene la lista de dispositivos emparejados y los muestra en el Spinner
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
@@ -212,12 +225,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Agrega este método para solicitar el permiso
+    // Solicita permisos de ubicación
     private void requestLocationPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_PERMISSION);
     }
 
-    // Agrega este método para solicitar el permiso
+    // Solicita permisos de conexión Bluetooth
     private void requestBluetoothConnectPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_BLUETOOTH_CONNECT_PERMISSION);
     }
@@ -235,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Obtiene un dispositivo Bluetooth por su nombre
     private BluetoothDevice getBluetoothDeviceByName(String name) {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -249,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    // Método para conectar un dispositivo Bluetooth
     private void ConectarDispBT() {
         if (DispositivoSeleccionado == null) {
             showToast("Selecciona un dispositivo Bluetooth.");
@@ -264,12 +279,13 @@ public class MainActivity extends AppCompatActivity {
             MyConexionBT = new ConnectedThread(btSocket);
             MyConexionBT.start();
             showToast("Conexión exitosa.");
-            MyConexionBT.write('o');
+            MyConexionBT.write('o'); // Enviar un comando inicial para comprobar conexión serial
         } catch (IOException e) {
             showToast("Error al conectar con el dispositivo.");
         }
     }
 
+    // Clase interna para manejar la comunicación Bluetooth
     private class ConnectedThread extends Thread {
         private final OutputStream mmOutStream;
         ConnectedThread(BluetoothSocket socket) {
@@ -295,6 +311,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    // Método para mostrar mensajes en pantalla (Toast)
     private void showToast(final String message) {
         runOnUiThread(new Runnable() {
             @Override
